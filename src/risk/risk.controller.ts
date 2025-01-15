@@ -1,5 +1,4 @@
-// src/risk/risk.controller.ts
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { RiskService } from './risk.service';
 
 @Controller('risk')
@@ -8,19 +7,16 @@ export class RiskController {
 
   @Get('taxpayers')
   async getAllTaxpayers() {
-    // TODO: Implement controller method
-    return 'Not implemented';
+    return this.riskService.getAllTaxpayers();
   }
 
   @Get(':taxpayerId')
-  async getTaxpayerRisk() {
-    // TODO: Implement controller method
-    return 'Not implemented';
+  async getTaxpayerRisk(@Param('taxpayerId') taxpayerId: string) {
+    return this.riskService.getTaxpayerRisk(taxpayerId);
   }
 
   @Get(':taxpayerId/history')
-  async getRiskHistory() {
-    // TODO: Implement controller method
-    return 'Not implemented';
+  async getRiskHistory(@Param('taxpayerId') taxpayerId: string) {
+    return this.riskService.getRiskHistory(taxpayerId);
   }
 }
