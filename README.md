@@ -22,11 +22,11 @@ The Tax Compliance Monitor backend service provides risk data for tax authoritie
 ### API Endpoints
 ```
 GET /api/risk/taxpayers
-- Returns list of all taxpayers with basic info
+- :white_check_mark: Returns list of all taxpayers with basic info
 - Used for taxpayer selection in dashboard
 
 GET /api/risk/:taxpayerId
-- Returns complete current risk profile
+- :white_check_mark: Returns complete current risk profile
 - Includes overall and component risks
 - Contains filing deadlines and status
 
@@ -59,22 +59,22 @@ GET /api/risk/:taxpayerId/history
 
 1. MongoDB Schema Implementation (1.5h)
 Acceptance Criteria:
-- Implement all schema classes in database/schemas/
-- Match provided type definitions
+- :white_check_mark: Implement all schema classes in database/schemas/
+- :white_check_mark: Match provided type definitions
 - Add field validation
 - Set up efficient indexes
 
 2. Risk Service Integration (1.5h)
 Acceptance Criteria:
-- Complete database queries in risk.service.ts
+- :white_check_mark: Complete database queries in risk.service.ts
 - Ensure type-safe responses
 - Handle errors appropriately
 - Consider query performance
 
 3. Controller Implementation (1h)
 Acceptance Criteria:
-- Implement endpoints in risk.controller.ts
-- Use service methods
+- :white_check_mark: Implement endpoints in risk.controller.ts
+- :white_check_mark: Use service methods
 - Handle edge cases
 - Return correct status codes
 
