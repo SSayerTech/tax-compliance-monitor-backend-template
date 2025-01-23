@@ -111,8 +111,6 @@ export class HistoricalRiskData implements RiskInterface.HistoricalRiskData{
 
 @Schema()
 export class Taxpayer {
-  @Prop({ required: true })
-  taxpayerId: string;
 
   @Prop({ type: TaxpayerInfo, required: true })  // Relación con el subdocumento TaxpayerInfo
   taxpayerInfo: TaxpayerInfo;
@@ -121,7 +119,7 @@ export class Taxpayer {
   riskProfile: RiskProfile;
 
   @Prop({ type: [HistoricalRiskData], required: false })
-  historicalRiskData?: HistoricalRiskData[];
+  history?: HistoricalRiskData[];  
 }
 
 export const TaxpayerSchema = SchemaFactory.createForClass(Taxpayer);

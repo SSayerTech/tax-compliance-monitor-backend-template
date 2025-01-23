@@ -1,6 +1,7 @@
 // src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +12,7 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type,Authorization',
   });
   app.setGlobalPrefix('api'); // Add 'api' prefix to all routes
+  app.useGlobalPipes(new ValidationPipe())
   await app.listen(3001); // Change port to 3001 since Nuxt uses 3000
 }
 bootstrap();
