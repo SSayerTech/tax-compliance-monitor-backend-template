@@ -1,25 +1,46 @@
 // src/risk/risk.service.ts
 import { Injectable } from '@nestjs/common';
-import type { TaxpayerRiskData, HistoricalRiskData } from '../types/risk';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Taxpayer } from '../database/schemas/taxpayer.schema';
+import type { TaxpayerRiskData } from '../types/risk';
 import type { TaxpayerInfo } from '../types/taxpayer';
-// TODO: Import mongoose and taxpayer schema
 
 @Injectable()
 export class RiskService {
-  // TODO: Implement constructor
+  constructor(
+    @InjectModel(Taxpayer.name) private taxpayerModel: Model<Taxpayer>,
+  ) {}
 
-  async getTaxpayerRisk(): Promise<TaxpayerRiskData | null> {
-    // TODO: Implement service method
-    return null;
+  async getTaxpayerRisk(taxpayerId: string): Promise<TaxpayerRiskData | null> {
+    const taxpayer = await this.taxpayerModel
+      .findOne({ 'taxpayer.id': taxpayerId }, { __v: 0, _id: 0 })
+      .lean();
+    return taxpayer as TaxpayerRiskData;
   }
 
-  async getRiskHistory(): Promise<HistoricalRiskData[] | null> {
-    // TODO: Implement service method
-    return null;
+  async getRiskHistory(
+    taxpayerId: string,
+  ): Promise<TaxpayerRiskData['history'] | null> {
+    const taxpayer = await this.taxpayerModel
+      .findOne({ 'taxpayer.id': taxpayerId }, { history: 1, _id: 0 })
+      .lean();
+    return taxpayer?.history || null;
   }
 
   async getAllTaxpayers(): Promise<TaxpayerInfo[]> {
-    // TODO: Implement service method
-    return [];
+    const taxpayers = await this.taxpayerModel
+      .find({}, { taxpayer: 1, _id: 0 })
+      .lean();
+    return taxpayers
+      .map((doc) => doc.taxpayer)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  async taxpayerExists(taxpayerId: string): Promise<boolean> {
+    const count = await this.taxpayerModel
+      .countDocuments({ 'taxpayer.id': taxpayerId })
+      .exec();
+    return count > 0;
   }
 }

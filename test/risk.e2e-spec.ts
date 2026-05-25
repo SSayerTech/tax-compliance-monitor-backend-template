@@ -1,29 +1,17 @@
 // test/risk.e2e-spec.ts
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { getModelToken } from '@nestjs/mongoose';
-import { AppModule } from './../src/app.module';
-// TODO: Import mock data and request drom supertest
+import request from 'supertest';
+import {
+  mockTaxpayerData,
+  mockTaxpayerHistory,
+} from '../src/risk/test/mock-data';
+import { createE2eApp, taxpayerMock } from './e2e-app';
 
 describe('RiskController (e2e)', () => {
   let app: INestApplication;
-  const mockModel = {
-    findOne: jest.fn(),
-    find: jest.fn(),
-  };
 
-  // Existing before and after logic is a proposal but can be modified
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(getModelToken('Taxpayer'))
-      .useValue(mockModel)
-      .compile();
-
-    app = moduleFixture.createNestApplication();
-    app.setGlobalPrefix('api');
-    await app.init();
+    app = await createE2eApp();
   });
 
   afterEach(() => {
@@ -31,31 +19,57 @@ describe('RiskController (e2e)', () => {
   });
 
   afterAll(async () => {
-    await Promise.all([
-      app.close(),
-      new Promise((resolve) => setTimeout(resolve, 500)), // Allow cleanup
-    ]);
+    await app.close();
   });
 
-  describe('/api/risk/taxpayers (GET)', () => {
-    it('should return list of taxpayers', () => {
-      // TODO: Implement test
+  describe('GET /api/risk/taxpayers', () => {
+    it('returns list of taxpayers', () => {
+      const mockTaxpayers = [
+        { taxpayer: { id: 'TP001', name: 'Test Corp', taxTypes: ['VAT'] } },
+        { taxpayer: { id: 'TP002', name: 'Test Inc', taxTypes: ['VAT'] } },
+      ];
+      taxpayerMock.find.mockReturnValueOnce({
+        lean: jest.fn().mockResolvedValueOnce(mockTaxpayers),
+      });
+
+      return request(app.getHttpServer())
+        .get('/api/risk/taxpayers')
+        .expect(200)
+        .expect(mockTaxpayers.map((t) => t.taxpayer));
     });
   });
 
-  describe('/api/risk/:taxpayerId (GET)', () => {
-    it('should return taxpayer risk data', () => {
-      // TODO: Implement test
+  describe('GET /api/risk/:taxpayerId', () => {
+    it('returns taxpayer risk data', () => {
+      taxpayerMock.findOne.mockReturnValueOnce({
+        lean: jest.fn().mockResolvedValueOnce(mockTaxpayerData),
+      });
+
+      return request(app.getHttpServer())
+        .get('/api/risk/TP001')
+        .expect(200)
+        .expect(mockTaxpayerData);
     });
 
-    it('should return 404 for non-existent taxpayer', () => {
-      // TODO: Implement test
+    it('returns 404 for non-existent taxpayer', () => {
+      taxpayerMock.findOne.mockReturnValueOnce({
+        lean: jest.fn().mockResolvedValueOnce(null),
+      });
+
+      return request(app.getHttpServer()).get('/api/risk/INVALID').expect(404);
     });
   });
 
-  describe('/api/risk/:taxpayerId/history (GET)', () => {
-    it('should return taxpayer history', () => {
-      // TODO: Implement test
+  describe('GET /api/risk/:taxpayerId/history', () => {
+    it('returns taxpayer history', () => {
+      taxpayerMock.findOne.mockReturnValueOnce({
+        lean: jest.fn().mockResolvedValueOnce({ history: mockTaxpayerHistory }),
+      });
+
+      return request(app.getHttpServer())
+        .get('/api/risk/TP001/history')
+        .expect(200)
+        .expect(mockTaxpayerHistory);
     });
   });
 });

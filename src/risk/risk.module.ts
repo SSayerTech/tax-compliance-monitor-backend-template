@@ -13,5 +13,6 @@ import { Taxpayer, TaxpayerSchema } from '../database/schemas/taxpayer.schema';
   ],
   controllers: [RiskController],
   providers: [RiskService],
+  exports: [RiskService],
 })
 export class RiskModule {}

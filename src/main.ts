@@ -1,16 +1,19 @@
-// src/main.ts
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // Enable CORS
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+
   app.enableCors({
-    origin: 'http://localhost:3000', // Your Nuxt app URL
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
   });
-  app.setGlobalPrefix('api'); // Add 'api' prefix to all routes
-  await app.listen(3001); // Change port to 3001 since Nuxt uses 3000
+
+  app.setGlobalPrefix('api');
+  await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();

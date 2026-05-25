@@ -2,7 +2,7 @@
 export const mockTaxpayerData = {
   taxpayer: {
     id: 'TP001',
-    name: 'Acme Corp',
+    name: 'Test Corp',
     taxTypes: ['VAT', 'INCOME_TAX'],
   },
   riskProfile: {
@@ -40,68 +40,10 @@ export const mockTaxpayerData = {
         {
           type: 'RISK_INCREASE',
           description: 'Multiple late VAT filings detected',
-          exposure: 3000000, // Delta from previous month
+          exposure: 3000000,
         },
       ],
     },
-    {
-      period: '2024-10',
-      overallScore: 52,
-      vatScore: 55,
-      incomeTaxScore: 32,
-      totalExposure: 22000000,
-      events: [
-        {
-          type: 'RISK_INCREASE',
-          description: 'Inconsistent VAT declaration patterns',
-          exposure: 2000000, // Delta
-        },
-      ],
-    },
-    {
-      period: '2024-09',
-      overallScore: 50,
-      vatScore: 52,
-      incomeTaxScore: 32,
-      totalExposure: 20000000,
-      events: [
-        {
-          type: 'LATE_FILING',
-          description: 'VAT filing deadline missed by 2 days',
-          exposure: 2000000, // Delta
-        },
-      ],
-    },
-    {
-      period: '2024-08',
-      overallScore: 48,
-      vatScore: 48,
-      incomeTaxScore: 32,
-      totalExposure: 18000000,
-      events: [
-        {
-          type: 'LATE_FILING',
-          description: 'VAT declaration submitted close to deadline',
-          exposure: 3000000, // Delta
-        },
-      ],
-    },
-    {
-      period: '2024-07',
-      overallScore: 45,
-      vatScore: 45,
-      incomeTaxScore: 32,
-      totalExposure: 15000000,
-      events: [
-        {
-          type: 'MISSING_DECLARATION',
-          description:
-            'Initial risk assessment - Supporting documentation pending',
-          exposure: 15000000, // Base exposure
-        },
-      ],
-    },
-    // Add more historical data...
   ],
 };
 
