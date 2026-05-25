@@ -65,6 +65,16 @@ Study these files before writing anything:
 
 The existing risk endpoints (`GET /api/risk/:taxpayerId` and `GET /api/risk/:taxpayerId/history`) return pre-computed scores stored in the `taxpayers` collection. They do not touch invoices. Your task in Story 3 is to add a complementary endpoint that computes risk live from the `invoices` and `blocked_ruts` collections.
 
+### Live endpoints
+
+These work out of the box once you configure your `.env`. Use them to verify your setup and study the response shapes before implementing anything.
+
+| Method | Path                             | Description                                      |
+| ------ | -------------------------------- | ------------------------------------------------ |
+| GET    | `/api/risk/taxpayers`            | List all taxpayers (id, name, taxTypes)          |
+| GET    | `/api/risk/:taxpayerId`          | Full pre-computed risk profile for a taxpayer    |
+| GET    | `/api/risk/:taxpayerId/history`  | Historical risk score snapshots for a taxpayer   |
+
 ---
 
 ## What to implement
